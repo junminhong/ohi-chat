@@ -3,7 +3,6 @@ package models
 type Member struct {
 	ID       int `gorm:"primaryKey"`
 	Account  string
-	Password int8
+	Password string
 	token    string
-	MemberID int
 }

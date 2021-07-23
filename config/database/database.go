@@ -19,7 +19,7 @@ type DBINFO struct {
 	dbPort     string
 }
 
-func setupDBInfo(dbInfo *DBINFO) {
+func (dbInfo DBINFO) setupDBInfo() *DBINFO {
 	err := godotenv.Load()
 	if err != nil {
 		utils.ShowErrSystemMsg("Failed to load env file")
@@ -30,12 +30,12 @@ func setupDBInfo(dbInfo *DBINFO) {
 	dbInfo.dbHost = os.Getenv("DB_HOST")
 	dbInfo.dbName = os.Getenv("DB_NAME")
 	dbInfo.dbPort = os.Getenv("DB_PORT")
+	return &dbInfo
 }
 
-func SetupDB() *gorm.DB {
-	dbInfo := DBINFO{}
-	setupDBInfo(&dbInfo)
-	fmt.Println(dbInfo)
+func GetDB() *gorm.DB {
+	dbInfo := &DBINFO{}
+	dbInfo = dbInfo.setupDBInfo()
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Taipei",
 		dbInfo.dbHost, dbInfo.dbUser, dbInfo.dbPassword, dbInfo.dbName, dbInfo.dbPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
