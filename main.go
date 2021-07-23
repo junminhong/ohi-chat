@@ -27,18 +27,15 @@ func memberRegister(c *gin.Context) {
 	})
 }
 
-type User struct {
-	ID   uint `gorm:"primaryKey"`
-	Name string
-	Age  uint8
-}
-
 func main() {
 	utils.ShowSystemMsg("oHi-chat server 正在努力啟動中！")
 	utils.ShowSystemMsg("正在進行資料庫設定！")
-	db := config.SetupDB()
-	db.AutoMigrate(&User{})
-	user := User{Name: "Jinzhu", Age: 18}
-	result := db.Create(&user)
-	fmt.Println(result)
+	//postgresDB := config.SetupDB()
+	//db.MigrateDB(postgresDB)
+	config.InitRouter()
+
+	/*newCompany := models.Company{}
+	postgresDB.Table("companies").Where("name = ?", "測試公司").Scan(&newCompany)
+	postgresDB.Create(&models.Member{Name: "b", Age: 18, CompanyID: newCompany.ID, Company: newCompany})*/
+
 }
