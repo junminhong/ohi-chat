@@ -1,4 +1,4 @@
-package member
+package chat
 
 import (
 	"fmt"
@@ -16,8 +16,8 @@ var upGrader = websocket.Upgrader{
 
 var wsList = []*websocket.Conn{}
 
-func WsPing(ctx *gin.Context) {
-	ws, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
+func WsPing(c *gin.Context) {
+	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
 	wsList = append(wsList, ws)
 	if err != nil {
 		return
@@ -40,8 +40,6 @@ func WsPing(ctx *gin.Context) {
 		}*/
 		// 寫入Websocket
 		for _, wsa := range wsList {
-			pHandelr := wsa.PingHandler()
-			fmt.Println(pHandelr)
 			err = wsa.WriteMessage(mt, message)
 			if err != nil {
 				break
