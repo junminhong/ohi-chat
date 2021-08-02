@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/junminhong/ohi-chat/app/controllers/member"
+	"github.com/junminhong/ohi-chat/app/controllers/chat"
 	"github.com/junminhong/ohi-chat/utils"
 )
 
@@ -28,10 +28,7 @@ func InitRoutes() {
 	router.Use(CORSMiddleware())
 	v1 := router.Group("/api/v1")
 	{
-		v1.POST("/signup", member.Signup)
-		v1.POST("/signin", member.Signin)
-		v1.POST("/test", member.Test)
-		v1.GET("/ping", member.WsPing)
+		v1.GET("/chat", chat.WsPing)
 	}
 	utils.ShowSystemMsg("oHi-chat server 正在努力運行中！")
 	router.Run(":8070")
