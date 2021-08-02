@@ -9,6 +9,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/jackc/pgx/v4 v4.12.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.11 // indirect

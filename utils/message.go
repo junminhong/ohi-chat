@@ -7,13 +7,17 @@ import (
 )
 
 const (
-	SUCCESS = 200
-	ERROR   = 404
+	SIGNUP      = 1
+	SIGNUPERROR = 2
+	SUCCESS     = 200
+	ERROR       = 404
 )
 
 var MsgFlags = map[int]string{
-	SUCCESS: "ok",
-	ERROR:   "fail",
+	SIGNUP:      "註冊成功",
+	SIGNUPERROR: "註冊失敗",
+	SUCCESS:     "ok",
+	ERROR:       "fail",
 }
 
 type CTmp struct {
