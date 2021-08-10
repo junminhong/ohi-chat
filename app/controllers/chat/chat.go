@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,35 +14,41 @@ var upGrader = websocket.Upgrader{
 	},
 }
 
-var wsList = []*websocket.Conn{}
+type Member struct {
+	Websocket *websocket.Conn
+	NickName  string
+	Activity  bool
+}
+
+var memberList = []Member{}
 
 func WsPing(c *gin.Context) {
 	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
-	wsList = append(wsList, ws)
+	newMember := Member{Websocket: ws, NickName: "", Activity: true}
+	memberList = append(memberList, newMember)
 	if err != nil {
 		return
 	}
 	defer ws.Close()
 	for {
 		// 讀取ws Socket傳來的訊息
-		mt, message, err := ws.ReadMessage()
-		fmt.Println(len(wsList))
+		mt, msgTmp, err := ws.ReadMessage()
 		if err != nil {
-			break
+			return
 		}
-		// 如果是ping
-		/*if string(message) == "ping" {
-			// 就回pong
-			message = []byte("pong")
-		} else {
-			// 如果是其他, 就回文字訊息類型, 內容就是回聲 (鸚鵡XD)
-			ws.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintln("got it : "+string(message))))
-		}*/
 		// 寫入Websocket
-		for _, wsa := range wsList {
-			err = wsa.WriteMessage(mt, message)
-			if err != nil {
-				break
+		for _, member := range memberList {
+			log.Println(member.Activity)
+			if member.Activity {
+				if member.Websocket == ws {
+					continue
+				}
+				msg := member.NickName + string(msgTmp)
+				err = member.Websocket.WriteMessage(mt, []byte(msg))
+				if err != nil {
+					member.Activity = false
+					log.Println(err.Error())
+				}
 			}
 		}
 	}
